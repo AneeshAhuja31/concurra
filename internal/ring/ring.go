@@ -33,6 +33,18 @@ func (r *Ring[T]) Len() int{
 func (r *Ring[T]) Cap() int {
 	return r.cap
 }
+// returns all valid entries in chronological order oldest to newest
+func (r *Ring[T]) Slice() []T{ 
+	if r.count == 0 {
+		return []T{}
+	}
+	result := make([]T, r.count)
+	start := (r.head - r.count) % r.cap
+	for i := 0; i < r.count; i++ {
+		result[i] = r.buf[(start+i)%r.cap]
+	}
+	return result
+}
 
 func (r *Ring[T]) Clear() {
 	r.head=0
